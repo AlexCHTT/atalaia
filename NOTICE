@@ -9,3 +9,8 @@ Componentes de terceiros incluídos neste repositório:
   Lista de fabricantes e produtos USB mantida em http://www.linux-usb.org/usb-ids.html.
   Segundo o projeto de origem, é distribuída sob GPL-2.0-ou-posterior OU BSD-3-Clause, à escolha de quem a usa.
   Aqui ela é usada sob os termos da BSD-3-Clause.
+
+- Logotipo (src/Atalaia.Server/wwwroot/img/logo.svg e logo-dark.svg)
+  As letras de "Atalaia" são contornos derivados da fonte Poppins (Copyright 2020 The Poppins Project Authors),
+  distribuída sob a SIL Open Font License 1.1: https://openfontlicense.org e https://github.com/itfoundry/Poppins.
+  O símbolo (a torre de vigia) é desenho original do projeto, sob a mesma Apache-2.0.

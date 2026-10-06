@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<!-- Imagem de pré-visualização do GitHub (1280x640). Para refazer o PNG: abra esta página numa janela de 1280x640 e capture a tela. -->
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  html, body { width: 1280px; height: 640px; overflow: hidden; }
+  body {
+    font-family: "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif; color: #eaf0fa;
+    background:
+      radial-gradient(900px 520px at 88% 6%, rgba(74, 155, 255, .20), transparent 62%),
+      radial-gradient(1100px 700px at 10% 110%, rgba(74, 155, 255, .22), transparent 60%),
+      linear-gradient(135deg, #0a1428 0%, #0f2350 100%);
+    position: relative;
+  }
+  .grid { position: absolute; inset: 0; opacity: .5;
+    background-image: linear-gradient(rgba(125, 179, 242, .07) 1px, transparent 1px), linear-gradient(90deg, rgba(125, 179, 242, .07) 1px, transparent 1px);
+    background-size: 48px 48px; mask-image: radial-gradient(ellipse at 30% 40%, #000 0%, transparent 72%); }
+  .wrap { position: relative; height: 100%; padding: 0 96px; display: flex; flex-direction: column; justify-content: center; gap: 34px; }
+  .logo { height: 168px; width: auto; align-self: flex-start; }
+  h1 { font-size: 46px; line-height: 1.18; font-weight: 600; letter-spacing: -.8px; max-width: 900px; }
+  h1 b { color: #7db3f2; font-weight: 600; }
+  .chips { display: flex; gap: 14px; flex-wrap: wrap; }
+  .chip { padding: 9px 18px; border-radius: 999px; font-size: 19px; font-weight: 500; color: #cfe0f7; background: rgba(125, 179, 242, .12); border: 1px solid rgba(125, 179, 242, .28); }
+</style></head>
+<body>
+  <div class="grid"></div>
+  <div class="wrap">
+    <img class="logo" src="../src/Atalaia.Server/wwwroot/img/logo-dark.svg" alt="Atalaia">
+    <h1>Inventário, saúde e auditoria de <b>computadores Windows</b>, com painel e instalação em massa.</h1>
+    <div class="chips"><span class="chip">Open source · Apache-2.0</span><span class="chip">Alternativa ao GLPI</span><span class="chip">Instala em minutos com Docker</span><span class="chip">Seus dados ficam com você</span></div>
+  </div>
+</body></html>

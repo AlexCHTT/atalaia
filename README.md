@@ -1,4 +1,9 @@
-# Atalaia
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="src/Atalaia.Server/wwwroot/img/logo-dark.svg">
+    <img src="src/Atalaia.Server/wwwroot/img/logo.svg" alt="Atalaia" height="84">
+  </picture>
+</p>
 
 **Inventário, saúde e auditoria de computadores Windows**, com agente, painel web e instalação em massa. Gratuito e open source (Apache-2.0): uma alternativa ao GLPI para quem quer um painel sempre atualizado e fácil de instalar.
 
@@ -229,6 +234,7 @@ installer/              Package.wxs (WiX) + build-msi.cmd (MSI opcional, para GP
 scripts/                run_suite.py (roda os testes), test_*.py (suítes), dev-service.ps1 (serviço de teste), seed_demo.py (frota fictícia)
 .github/workflows/      ci.yml (compila e roda os testes a cada envio)
 Dockerfile, docker-compose.yml, .env.example, install.sh, install.ps1
+branding/               script que gera a logo (build_logo.py) e a imagem de pré-visualização do GitHub
 LICENSE, NOTICE, SECURITY.md, CONTRIBUTING.md
 ```
 

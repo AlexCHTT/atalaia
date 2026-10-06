@@ -28,6 +28,9 @@ src/Atalaia.Server/data/
 *.msi
 *.wixpdb
 
+# --- Logo: fonte baixada para gerar os contornos ---
+branding/.fonts/
+
 # --- Python (scripts de teste) ---
 __pycache__/
 *.pyc
