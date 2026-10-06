@@ -1,10 +1,22 @@
 # Atalaia
 
-Inventário e auditoria de máquinas Windows da rede interna. Um **agente** (serviço do Windows) envia dados a um **servidor** (API + painel web), que guarda o estado atual, o histórico de mudanças e métricas.
+**Inventário, saúde e auditoria de computadores Windows**, com agente, painel web e instalação em massa. Gratuito e open source (Apache-2.0): uma alternativa ao GLPI para quem quer um painel sempre atualizado e fácil de instalar.
+
+- **Inventário sempre atual:** hardware, sistema, rede, discos, software, periféricos, usuários e ferramentas de IA de cada PC.
+- **Índice de saúde (0 a 100)** por computador: antivírus, firewall, criptografia, disco e portas expostas.
+- **Auditoria que ninguém edita:** tudo que muda fica registrado, com quem estava usando o computador.
+- **Instalação em vários computadores pela tela:** o painel procura os PCs na rede, você marca quais quer e acompanha cada um.
+- **Teste de velocidade** de cada computador, direto do painel.
+- **Instala em minutos com Docker**, em HTTP direto na rede interna ou atrás de um proxy com HTTPS.
+- **Seus dados ficam com você:** roda no seu servidor e não envia nada para fora.
+
+> Projeto em desenvolvimento ativo. Leia "Limitações e pendências conhecidas" antes de usar em produção.
+
+Um **agente** (serviço do Windows) envia dados a um **servidor** (API + painel web), que guarda o estado atual, o histórico de mudanças e as métricas:
 
 ```
-[Agente - serviço Windows]  --HTTPS POST /api/checkin-->  [Servidor ASP.NET + SQLite]  -->  [Painel web]
-   roda como SYSTEM em cada PC                              Docker/Linux                      login por usuário e perfil
+[Agente - serviço Windows]  --POST /api/checkin (HTTP ou HTTPS)-->  [Servidor ASP.NET + SQLite]  -->  [Painel web]
+   roda como SYSTEM em cada PC                                         Docker/Linux                    login por usuário e perfil
 ```
 
 ## Instalação rápida
@@ -214,8 +226,10 @@ src/Atalaia.Server   API (ASP.NET + SQLite), HealthAssessment.cs (índice de sa�
   wwwroot/              o painel: index.html, css/app.css, js/ (módulos ES: core, ui, charts, store, pages/...), img/ (logo)
 src/Atalaia.Shared   contrato JSON usado pelos dois
 installer/              Package.wxs (WiX) + build-msi.cmd (MSI opcional, para GPO "software atribuído")
-scripts/                dev-service.ps1 (serviço de teste), seed_demo.py (frota fictícia), simulate_*.py (testes)
-Dockerfile, docker-compose.yml, .env.example
+scripts/                run_suite.py (roda os testes), test_*.py (suítes), dev-service.ps1 (serviço de teste), seed_demo.py (frota fictícia)
+.github/workflows/      ci.yml (compila e roda os testes a cada envio)
+Dockerfile, docker-compose.yml, .env.example, install.sh, install.ps1
+LICENSE, NOTICE, SECURITY.md, CONTRIBUTING.md
 ```
 
 ## Rodar em desenvolvimento
@@ -232,9 +246,25 @@ dotnet run --project src/Atalaia.Agent --no-launch-profile
 dotnet run --project src/Atalaia.Agent --no-launch-profile -- --dump
 ```
 
+**Agente para o painel entregar:** ao rodar o servidor do código (e não pela imagem Docker, que já traz o agente), publique o agente uma vez para a tela Instalação ter o que entregar aos computadores:
+
+```powershell
+dotnet publish src/Atalaia.Agent -c Release -r win-x64 --self-contained -p:PublishSingleFile=true -p:EnableCompressionInSingleFile=true -p:Version=1.2.0 -o publish/agent
+```
+
 Sem administrador, o agente não lê TPM e BitLocker (aparecem como "?" = desconhecido). Como serviço (SYSTEM) lê.
 
 Os arquivos do painel (`wwwroot/`) são servidos direto do disco: editar HTML/CSS/JS vale com F5, sem recompilar. Já mudanças em C# exigem parar o servidor e subir de novo. Depois de atualizar o servidor, reinicie-o antes de abrir o painel: o painel novo depende de campos que só o servidor novo envia.
+
+### Testes
+
+```powershell
+dotnet build src/Atalaia.Server -c Release
+python scripts/run_suite.py            # todas as suítes que o seu sistema suporta
+python scripts/run_suite.py auth setup # ou só algumas: auth, setup, settings, deploy
+```
+
+Cada suíte sobe um **servidor descartável com banco novo** (numa pasta temporária), roda e o desliga. Nunca usa o seu banco de verdade. A suíte `deploy` exige o agente publicado (acima) e o Windows PowerShell. O GitHub roda as mesmas suítes a cada envio (`.github/workflows/ci.yml`). Veja também o [CONTRIBUTING](CONTRIBUTING.md).
 
 ### Modo demonstração (frota fictícia)
 
@@ -304,6 +334,21 @@ O projeto foi renomeado para **Atalaia**. A atualização não perde nada:
 - **Agentes já instalados** continuam enviando dados normalmente (o protocolo não mudou). Para trocá-los pelo agente novo, rode o script da tela **Instalação** (ou o assistente de rede): ele **remove sozinho** o serviço antigo `AgentTools`, a pasta e a chave de registro antigas e instala o `AtalaiaAgent`. Em desenvolvimento, `scripts\dev-service.ps1 install` faz o mesmo.
 - **Docker:** o serviço do compose agora é `atalaia` e o volume `atalaia-data`. Quem já tinha dados no volume antigo (`agenttools-data`) deve copiá-los ou apontar o volume antigo no `docker-compose.yml`.
 - **Nomes que mudaram:** serviço do Windows `AtalaiaAgent`, executável `Atalaia.Agent.exe`, pasta `Program Files\Atalaia`, chave `HKLM\SOFTWARE\Atalaia`, cookie `atalaia_session`.
+
+## Antivírus e assinatura do agente
+
+O agente é um executável que roda como **SYSTEM** e coleta dados do computador. Por isso, **antivírus e EDR podem desconfiar dele**, ainda mais porque o arquivo **não é assinado digitalmente** (assinatura exige um certificado). O que fazer:
+
+- **Cadastre uma exceção** no antivírus para `C:\Program Files\Atalaia\Atalaia.Agent.exe` (ou para o hash SHA-256 que a tela Instalação mostra).
+- Empresas que **bloqueiam executáveis sem assinatura** (AppLocker/WDAC) precisam assinar o agente com um certificado da própria empresa e distribuí-lo como "editor confiável" pela GPO.
+- Qualquer pessoa pode **conferir o que está instalando**: o código é aberto, o agente do painel é compilado a partir dele (imagem Docker) e a instalação confere o SHA-256 antes de executar.
+
+Assinar as versões oficiais está nos planos; até lá, o caminho acima vale.
+
+## Segurança e contribuições
+
+- Encontrou uma vulnerabilidade? **Não abra issue pública**: veja o [SECURITY.md](SECURITY.md).
+- Quer contribuir? Veja o [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Licença
 

@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  linux:
+    name: Servidor, testes e Docker (Linux)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compilar o servidor
+        run: dotnet build src/Atalaia.Server -c Release --nologo
+      - name: Testes (servidor descartável com banco novo)
+        run: python scripts/run_suite.py auth setup settings
+      - name: Construir a imagem Docker (inclui o agente do Windows embutido)
+        run: docker build -t atalaia-ci .
+
+  windows:
+    name: Agente e instalação em massa (Windows)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compilar a solução inteira (servidor + agente)
+        run: dotnet build Atalaia.slnx -c Release --nologo
+      - name: Publicar o agente (o painel o entrega aos computadores)
+        run: dotnet publish src/Atalaia.Agent -c Release -r win-x64 --self-contained -p:PublishSingleFile=true -p:EnableCompressionInSingleFile=true -p:Version=1.2.0 -o publish/agent --nologo
+      - name: Testes da instalação em massa
+        run: python scripts/run_suite.py deploy

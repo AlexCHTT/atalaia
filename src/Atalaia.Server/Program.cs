@@ -82,6 +82,37 @@ if (!setup.NeedsSetup) tokens.EnsureOneActive();   // instalação automatizada 
 // Sem nenhuma conta: o código de configuração aparece no log assim que o servidor estiver ouvindo
 app.Lifetime.ApplicationStarted.Register(() => { if (setup.NeedsSetup) setup.Announce(app.Urls.Count > 0 ? app.Urls : ["http://localhost:8080"]); });
 
+// As credenciais de desenvolvimento (admin / dev-senha-123456, dev-enroll-token) são públicas: estão no repositório.
+// Tudo bem em localhost; se o servidor estiver acessível pela rede com elas, qualquer pessoa entra como administrador.
+app.Lifetime.ApplicationStarted.Register(() =>
+{
+    static bool IsLoopback(string url)
+    {
+        try
+        {
+            var host = new Uri(url).Host.Trim('[', ']');
+            return host == "localhost" || (System.Net.IPAddress.TryParse(host, out var ip) && System.Net.IPAddress.IsLoopback(ip));
+        }
+        catch (UriFormatException) { return false; }   // formatos como "http://+:8080" escutam em todas as interfaces
+    }
+
+    var devCredentials = adminPassword == "dev-senha-123456" || configEnrollToken == "dev-enroll-token";
+    var exposed = app.Urls.Any(u => !IsLoopback(u));
+    if (devCredentials && exposed)
+        app.Logger.LogWarning("""
+
+            ============================================================
+             PERIGO: credenciais de DESENVOLVIMENTO em uso e o servidor está acessível pela rede.
+             A senha e o token de desenvolvimento são públicos (estão no repositório): qualquer pessoa pode entrar como administrador.
+             Pare o servidor e use o modo normal (sem ASPNETCORE_ENVIRONMENT=Development): o assistente de primeira execução cria a sua conta.
+            ============================================================
+            """);
+    else if (devCredentials)
+        app.Logger.LogWarning("Credenciais de DESENVOLVIMENTO em uso (admin / dev-senha-123456). Tudo bem enquanto o servidor responde só em localhost; nunca exponha este modo na rede.");
+    else if (app.Environment.IsDevelopment() && exposed)
+        app.Logger.LogWarning("O servidor está em modo Development e acessível pela rede. Esse modo é só para desenvolvimento; em uso real, suba sem ASPNETCORE_ENVIRONMENT=Development.");
+});
+
 app.UseForwardedHeaders();
 
 // ---- Cabeçalhos de segurança em todas as respostas ----
