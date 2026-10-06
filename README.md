@@ -20,8 +20,8 @@
 Um **agente** (serviço do Windows) envia dados a um **servidor** (API + painel web), que guarda o estado atual, o histórico de mudanças e as métricas:
 
 ```
-[Agente - serviço Windows]  --POST /api/checkin (HTTP ou HTTPS)-->  [Servidor ASP.NET + SQLite]  -->  [Painel web]
-   roda como SYSTEM em cada PC                                         Docker/Linux                    login por usuário e perfil
+[Agente Windows] --POST /api/checkin--> [Servidor + SQLite] --> [Painel web]
+ serviço (SYSTEM)     HTTP ou HTTPS        Docker / Linux        login e perfis
 ```
 
 ## Instalação rápida
