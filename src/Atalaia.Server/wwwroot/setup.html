@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Configuração inicial · Atalaia</title>
+<meta name="color-scheme" content="light dark">
+<link rel="icon" type="image/svg+xml" href="/img/favicon.svg">
+<link rel="stylesheet" href="/css/app.css">
+<link rel="stylesheet" href="/css/login.css">
+<script src="/js/theme-boot.js"></script>
+</head>
+<body class="login-body">
+<main class="login">
+  <section class="login-hero" aria-hidden="true">
+    <div class="login-brand"><img src="/img/logo-mark.svg" alt="" width="46" height="46"><div><div class="brand-name">Atalaia</div><div class="brand-tag">Endpoint intelligence</div></div></div>
+    <div class="login-pitch">
+      <h2>Vamos deixar tudo pronto em dois minutos.</h2>
+      <ul>
+        <li><span id="ic-1"></span><div><b>1. Confirme que é você</b><span>O código aparece no terminal do servidor, para que ninguém na rede configure o painel antes de você.</span></div></li>
+        <li><span id="ic-2"></span><div><b>2. Crie o administrador</b><span>A conta que gerencia o painel e as demais pessoas.</span></div></li>
+        <li><span id="ic-3"></span><div><b>3. Instale os agentes</b><span>O painel gera o token e mostra como instalar nos computadores.</span></div></li>
+      </ul>
+    </div>
+    <div class="login-foot">Atalaia · configuração inicial</div>
+  </section>
+
+  <section class="login-side">
+    <form class="login-card card" id="step1" novalidate>
+      <img class="login-mini" src="/img/logo-mark.svg" alt="" width="40" height="40">
+      <h1>Configuração inicial</h1>
+      <p class="muted">Informe o código de configuração mostrado no terminal (ou nos logs do container) onde o servidor foi iniciado.</p>
+      <div class="login-alert" id="err1" role="alert" hidden></div>
+      <label class="fld" for="code"><span class="fld-l">Código de configuração</span>
+        <input class="field mono" id="code" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="9" placeholder="XXXX-XXXX" autofocus>
+        <span class="fld-h">Procure por “PRIMEIRA EXECUÇÃO” no log. Se o servidor reiniciar, o código muda.</span></label>
+      <button class="btn primary lg" id="go1" type="submit">Continuar</button>
+    </form>
+
+    <form class="login-card card" id="step2" novalidate hidden>
+      <img class="login-mini" src="/img/logo-mark.svg" alt="" width="40" height="40">
+      <h1>Crie o administrador</h1>
+      <p class="muted">Esta conta terá acesso total ao painel.</p>
+      <div class="login-alert" id="err2" role="alert" hidden></div>
+      <label class="fld" for="name"><span class="fld-l">Seu nome</span>
+        <input class="field" id="name" maxlength="80" autocomplete="name"></label>
+      <label class="fld" for="user"><span class="fld-l">Usuário (para entrar)</span>
+        <input class="field" id="user" maxlength="40" autocomplete="username" autocapitalize="none" spellcheck="false">
+        <span class="fld-h">3 a 40 caracteres: letras, números, ponto, hífen e sublinhado.</span></label>
+      <label class="fld" for="pw"><span class="fld-l">Senha</span>
+        <span class="pw"><input class="field" id="pw" type="password" autocomplete="new-password" spellcheck="false">
+        <button type="button" class="pw-eye" id="eye" aria-label="Mostrar ou ocultar a senha"></button></span>
+        <span class="strength"><span class="meter" id="meter"><i style="width:0"></i></span><span class="fld-h" id="strength">Mínimo de 10 caracteres, sem o nome de usuário dentro.</span></span></label>
+      <label class="fld" for="pw2"><span class="fld-l">Repita a senha</span>
+        <input class="field" id="pw2" type="password" autocomplete="new-password" spellcheck="false"></label>
+      <button class="btn primary lg" id="go2" type="submit">Criar administrador e entrar</button>
+    </form>
+  </section>
+</main>
+<script type="module" src="/js/setup.js"></script>
+</body>
+</html>

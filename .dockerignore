@@ -1,0 +1,7 @@
+**/bin
+**/obj
+# Bancos SQLite de desenvolvimento (não devem entrar na imagem)
+**/*.db
+**/*.db-wal
+**/*.db-shm
+.env

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Entrar · Atalaia</title>
+<meta name="color-scheme" content="light dark">
+<link rel="icon" type="image/svg+xml" href="/img/favicon.svg">
+<link rel="stylesheet" href="/css/app.css">
+<link rel="stylesheet" href="/css/login.css">
+<script src="/js/theme-boot.js"></script>
+</head>
+<body class="login-body">
+<main class="login">
+  <section class="login-hero" aria-hidden="true">
+    <div class="login-brand"><img src="/img/logo-mark.svg" alt="" width="46" height="46"><div><div class="brand-name">Atalaia</div><div class="brand-tag">Endpoint intelligence</div></div></div>
+    <div class="login-pitch">
+      <h2>Inventário e segurança dos seus computadores, num lugar só.</h2>
+      <ul>
+        <li><span id="ic-1"></span><div><b>Saúde de cada dispositivo</b><span>Antivírus, firewall, criptografia, disco e portas expostas, num índice de 0 a 100.</span></div></li>
+        <li><span id="ic-2"></span><div><b>Auditoria que ninguém edita</b><span>Tudo que muda em cada máquina fica registrado, com quem estava usando.</span></div></li>
+        <li><span id="ic-3"></span><div><b>Os dados ficam com você</b><span>O painel roda no seu servidor, sem enviar nada para fora.</span></div></li>
+      </ul>
+    </div>
+    <div class="login-foot">Atalaia · inventário e auditoria</div>
+  </section>
+
+  <section class="login-side">
+    <form class="login-card card" id="form" novalidate>
+      <img class="login-mini" src="/img/logo-mark.svg" alt="" width="40" height="40">
+      <h1>Entrar</h1>
+      <p class="muted">Use a sua conta do painel.</p>
+      <div class="login-alert" id="err" role="alert" hidden></div>
+
+      <label class="fld" for="u"><span class="fld-l">Usuário</span>
+        <input class="field" id="u" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" autofocus></label>
+      <label class="fld" for="p"><span class="fld-l">Senha</span>
+        <span class="pw"><input class="field" id="p" name="password" type="password" autocomplete="current-password" spellcheck="false">
+        <button type="button" class="pw-eye" data-eye="p" aria-label="Mostrar ou ocultar a senha" id="eye"></button></span>
+        <span class="fld-h caps" id="caps" hidden></span></label>
+
+      <button class="btn primary lg" id="go" type="submit">Entrar</button>
+      <p class="muted login-help">Esqueceu a senha? Peça a um administrador para redefini-la.</p>
+    </form>
+  </section>
+</main>
+<script type="module" src="/js/login.js"></script>
+</body>
+</html>

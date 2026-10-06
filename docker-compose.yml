@@ -1,0 +1,31 @@
+services:
+  atalaia:
+    build: .
+    restart: unless-stopped
+    ports:
+      # HTTP_PORT: porta que fica aberta na rede. BIND_ADDRESS: 0.0.0.0 = toda a rede interna; 127.0.0.1 = só este servidor.
+      # O instalador (install.sh / install.ps1) preenche isto; sem ele, vale 8080 em todas as interfaces.
+      - "${BIND_ADDRESS:-0.0.0.0}:${HTTP_PORT:-8080}:8080"
+    environment:
+      # Nada aqui é obrigatório. Na primeira execução o painel mostra um assistente no navegador (o código dele aparece em
+      # "docker compose logs atalaia") para criar o administrador, e o token dos agentes é gerado e fica na tela Instalação.
+      # ENROLL_TOKEN, ADMIN_USER e ADMIN_PASSWORD só servem para instalações automatizadas (sem passar pelo assistente).
+      Server__EnrollToken: ${ENROLL_TOKEN:-}
+      Server__AdminPassword: ${ADMIN_PASSWORD:-}
+      Server__AdminUser: ${ADMIN_USER:-admin}
+      # Valores iniciais (opcionais). Vazio = padrão do sistema. Depois de instalado, ajuste tudo na tela Configurações do painel, sem reiniciar.
+      Server__OfflineAfterMinutes: ${OFFLINE_AFTER_MINUTES:-}
+      # IP(s) do Nginx Proxy Manager (separados por vírgula; aceita CIDR). Sem isso o painel mostra o IP do proxy, não o da máquina.
+      Server__TrustedProxies: ${TRUSTED_PROXIES:-}
+      # false = esconde o teste de velocidade "até a internet" (que usa os servidores da Cloudflare); o teste até o servidor continua
+      Server__SpeedTest__InternetEnabled: ${SPEEDTEST_INTERNET:-}
+      Server__MetricsRetentionDays: ${METRICS_RETENTION_DAYS:-}
+      # 0 = nunca apaga a auditoria. O prazo é decisão da empresa; 730 (2 anos) é um ponto de partida comum.
+      Server__EventsRetentionDays: ${EVENTS_RETENTION_DAYS:-}
+    volumes:
+      - atalaia-data:/data
+
+# Em produção coloque um proxy reverso com HTTPS na frente (nginx, Caddy, Traefik):
+# o token do agente e a senha do painel trafegam em cabeçalhos HTTP.
+volumes:
+  atalaia-data:

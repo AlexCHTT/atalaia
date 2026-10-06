@@ -1,0 +1,69 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
+     xmlns:util="http://wixtoolset.org/schemas/v4/wxs/util">
+
+  <!-- UpgradeCode NUNCA muda: é ele que faz a versão nova substituir a antiga. -->
+  <Package Name="Atalaia Agent"
+           Manufacturer="TI"
+           Version="$(var.Version)"
+           UpgradeCode="6d8de879-5b3a-42d9-9a1a-e8285b9d1e59"
+           Scope="perMachine"
+           Language="1046">
+
+    <MajorUpgrade DowngradeErrorMessage="Já existe uma versão mais nova do Atalaia instalada." />
+    <MediaTemplate EmbedCab="yes" CompressionLevel="high" />
+
+    <!-- Valores padrão são gravados no MSI no build (ideal para GPO, que não passa parâmetros).
+         Ainda dá para sobrescrever na instalação: msiexec /i Atalaia.msi SERVER_URL=... TOKEN=... -->
+    <Property Id="SERVER_URL" Value="$(var.ServerUrl)" Secure="yes" />
+    <Property Id="TOKEN" Value="$(var.Token)" Secure="yes" Hidden="yes" />
+    <Property Id="INTERVAL_MINUTES" Value="5" Secure="yes" />
+
+    <StandardDirectory Id="ProgramFiles64Folder">
+      <Directory Id="INSTALLFOLDER" Name="Atalaia">
+
+        <Component Id="AgentService" Bitness="always64">
+          <File Id="AgentExe" Source="$(var.AgentExe)" KeyPath="yes" />
+
+          <!-- Roda como LocalSystem (padrão): necessário para ler TPM, BitLocker, log de segurança etc. -->
+          <ServiceInstall Id="AtalaiaService"
+                          Name="AtalaiaAgent"
+                          DisplayName="Atalaia Agent"
+                          Description="Envia o inventário desta máquina ao painel de TI."
+                          Type="ownProcess"
+                          Start="auto"
+                          ErrorControl="normal" />
+          <ServiceControl Id="AtalaiaServiceControl"
+                          Name="AtalaiaAgent"
+                          Start="install"
+                          Stop="both"
+                          Remove="uninstall"
+                          Wait="yes" />
+
+          <!-- Se o serviço cair, o Windows reinicia (após 5s, nas três primeiras falhas) -->
+          <util:ServiceConfig ServiceName="AtalaiaAgent"
+                              FirstFailureActionType="restart"
+                              SecondFailureActionType="restart"
+                              ThirdFailureActionType="restart"
+                              RestartServiceDelayInSeconds="5"
+                              ResetPeriodInDays="1" />
+        </Component>
+
+      </Directory>
+    </StandardDirectory>
+
+    <!-- Configuração em HKLM\SOFTWARE\Atalaia. A restrição de acesso (só SYSTEM/Administradores) é aplicada pelo próprio serviço ao iniciar:
+         o Permission do MSI deixou a chave legível por Usuários nos testes. -->
+    <Component Id="AgentConfig" Directory="INSTALLFOLDER" Bitness="always64">
+      <RegistryKey Root="HKLM" Key="SOFTWARE\Atalaia" >
+        <RegistryValue Name="ServerUrl" Type="string" Value="[SERVER_URL]" KeyPath="yes" />
+        <RegistryValue Name="EnrollToken" Type="string" Value="[TOKEN]" />
+        <RegistryValue Name="IntervalMinutes" Type="string" Value="[INTERVAL_MINUTES]" />
+      </RegistryKey>
+    </Component>
+
+    <Feature Id="Main">
+      <ComponentRef Id="AgentService" />
+      <ComponentRef Id="AgentConfig" />
+    </Feature>
+  </Package>
+</Wix>

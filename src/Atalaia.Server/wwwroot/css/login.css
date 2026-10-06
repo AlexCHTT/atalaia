@@ -1,0 +1,94 @@
+/* Tela de login e componentes de formulário/janela usados também no painel. */
+
+/* ---------- Formulários ---------- */
+.fld { display: flex; flex-direction: column; gap: 6px; margin: 0 0 16px; border: 0; padding: 0; min-width: 0; }
+.fld-l { font-weight: 600; font-size: 13px; color: var(--ink); }
+.fld-h { font-size: 12.5px; color: var(--muted); }
+.fld .field { width: 100%; height: 42px; }
+.pw { position: relative; display: block; }
+.pw .field { padding-right: 46px; }
+.pw-eye { position: absolute; right: 4px; top: 4px; width: 34px; height: 34px; border: 0; background: transparent; border-radius: 8px; color: var(--muted); display: grid; place-items: center; }
+.pw-eye:hover { background: var(--card-2); color: var(--ink); }
+.chk { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; color: var(--ink-2); cursor: pointer; }
+.chk input { margin-top: 3px; accent-color: var(--accent); }
+.fld-grid { display: flex; flex-direction: column; }
+.strength { margin: -6px 0 14px; display: flex; flex-direction: column; gap: 6px; }
+.fld > .strength { margin: 8px 0 0; }   /* dentro do rótulo (assistente de configuração) não há campo acima para "puxar" */
+.btn.lg { height: 46px; font-size: 15px; }
+.btn:disabled, .field:disabled { opacity: .55; cursor: not-allowed; }
+.row-actions { display: inline-flex; gap: 2px; }
+
+/* ---------- Janela (modal) ---------- */
+.modal-root { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: 20px; }
+.modal-scrim { position: absolute; inset: 0; background: rgba(8, 15, 30, .55); backdrop-filter: blur(3px); animation: fade .15s; }
+.modal { position: relative; width: min(560px, 100%); max-height: calc(100vh - 40px); overflow: auto; background: var(--card); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow-pop); animation: pop .18s; }
+.modal.sm { width: min(440px, 100%); }
+.modal-h { display: flex; gap: 12px; align-items: flex-start; padding: 22px 24px 4px; }
+.modal-h > div:first-child { flex: 1; min-width: 0; }
+.modal-h h2 { font-size: 18px; letter-spacing: -.2px; }
+.modal-h p { margin-top: 2px; font-size: 13px; }
+.modal-b { padding: 16px 24px 8px; }
+.modal-err { margin: 0 24px 8px; padding: 10px 12px; border-radius: 10px; background: color-mix(in srgb, var(--crit) 12%, var(--card)); border: 1px solid color-mix(in srgb, var(--crit) 34%, var(--card)); color: var(--ink); font-size: 13px; }
+.modal-f { display: flex; justify-content: flex-end; gap: 10px; padding: 14px 24px 22px; }
+.modal-root.busy .modal { opacity: .8; }
+@keyframes fade { from { opacity: 0; } }
+@keyframes pop { from { opacity: 0; transform: translateY(8px) scale(.98); } }
+
+/* credenciais mostradas uma vez */
+.cred { display: flex; flex-direction: column; gap: 12px; padding: 14px 16px; border-radius: 12px; background: var(--card-2); border: 1px solid var(--line); }
+.cred > div { display: flex; flex-direction: column; gap: 3px; }
+.cred b.mono { font-size: 15px; overflow-wrap: anywhere; user-select: all; }
+.cred-pw { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.cred-pw b { font-size: 18px !important; letter-spacing: .5px; }
+
+/* ---------- Perfis e menu do usuário ---------- */
+.roles { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.role-card { padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; }
+.me-wrap { position: relative; }
+button.me { font: inherit; color: inherit; cursor: pointer; text-align: left; }
+button.me:hover { background: var(--card-2); }
+.me .ic-chev { color: var(--muted); }
+.user-menu { position: absolute; right: 0; top: 52px; width: 270px; z-index: 40; background: var(--card); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow-pop); padding: 8px; }
+.user-menu .um-head { padding: 10px 12px 12px; border-bottom: 1px solid var(--line-2); margin-bottom: 6px; }
+.user-menu .um-head b { display: block; }
+.user-menu .um-head span { color: var(--muted); font-size: 12.5px; }
+.um-item { display: flex; align-items: center; gap: 10px; width: 100%; padding: 9px 12px; border: 0; background: transparent; border-radius: 9px; color: var(--ink); font: inherit; text-align: left; cursor: pointer; }
+.um-item:hover { background: var(--card-2); }
+.um-item .ic { color: var(--ink-2); }
+
+/* ---------- Tela de login ---------- */
+.login-body { min-height: 100vh; }
+.login { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); min-height: 100vh; }
+.login-hero {
+  position: relative; display: flex; flex-direction: column; justify-content: space-between; gap: 40px; padding: 44px 56px; color: #dbe6f7; overflow: hidden;
+  background: radial-gradient(900px 500px at 15% 0%, rgba(58, 125, 255, .35), transparent 60%), radial-gradient(700px 500px at 100% 100%, rgba(0, 190, 160, .18), transparent 60%), linear-gradient(160deg, #0a1426 0%, #0b1d3d 100%);
+}
+.login-hero::after { content: ""; position: absolute; inset: 0; background-image: linear-gradient(rgba(255, 255, 255, .035) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, .035) 1px, transparent 1px); background-size: 44px 44px; mask-image: radial-gradient(circle at 30% 30%, #000, transparent 75%); pointer-events: none; }
+.login-brand { position: relative; z-index: 1; display: flex; gap: 14px; align-items: center; }
+.login-brand img { filter: drop-shadow(0 6px 14px rgba(30, 110, 255, .45)); }
+.login-brand .brand-name { color: #fff; font-size: 24px; font-weight: 700; letter-spacing: -.4px; line-height: 1.1; }
+.login-brand .brand-name b { font-weight: 400; color: #7fb2ff; }
+.login-brand .brand-tag { font-size: 11px; letter-spacing: 1.8px; text-transform: uppercase; color: #7b8fb0; margin-top: 3px; }
+.login-pitch { position: relative; z-index: 1; max-width: 520px; }
+.login-pitch h2 { color: #fff; font-size: 34px; line-height: 1.18; letter-spacing: -.8px; font-weight: 700; margin-bottom: 30px; }
+.login-pitch ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 20px; }
+.login-pitch li { display: flex; gap: 14px; align-items: flex-start; }
+.login-pitch li > span { flex: none; width: 40px; height: 40px; border-radius: 11px; display: grid; place-items: center; background: rgba(255, 255, 255, .08); border: 1px solid rgba(255, 255, 255, .12); color: #8dbbff; }
+.login-pitch li b { display: block; color: #fff; font-weight: 600; margin-bottom: 2px; }
+.login-pitch li div > span { color: #9fb2cf; font-size: 14px; }
+.login-foot { position: relative; z-index: 1; color: #6f82a3; font-size: 12.5px; }
+.login-side { display: grid; place-items: center; padding: 32px; background: var(--bg); }
+.login-card { width: min(420px, 100%); padding: 36px 34px 30px; }
+.login-card h1 { font-size: 26px; letter-spacing: -.5px; margin: 0 0 4px; }
+.login-card > p.muted { margin-bottom: 22px; }
+.login-mini { display: none; margin-bottom: 14px; }
+.login-alert { margin: 0 0 16px; padding: 11px 13px; border-radius: 10px; font-size: 13.5px; background: color-mix(in srgb, var(--crit) 12%, var(--card)); border: 1px solid color-mix(in srgb, var(--crit) 34%, var(--card)); color: var(--ink); }
+.login-card .btn.primary { width: 100%; margin-top: 4px; }
+.login-help { margin-top: 18px; text-align: center; font-size: 13px; }
+.caps { color: var(--warn-ink); display: flex; gap: 6px; align-items: center; }
+@media (max-width: 900px) {
+  .login { grid-template-columns: 1fr; }
+  .login-hero { display: none; }
+  .login-mini { display: block; }
+  .login-side { min-height: 100vh; align-items: start; padding-top: 12vh; }
+}

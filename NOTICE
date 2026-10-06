@@ -1,0 +1,11 @@
+Atalaia
+Copyright 2026 Atalaia contributors
+
+Este produto é distribuído sob a Apache License 2.0 (veja o arquivo LICENSE).
+
+Componentes de terceiros incluídos neste repositório:
+
+- usb.ids (src/Atalaia.Server/Resources/usb.ids)
+  Lista de fabricantes e produtos USB mantida em http://www.linux-usb.org/usb-ids.html.
+  Segundo o projeto de origem, é distribuída sob GPL-2.0-ou-posterior OU BSD-3-Clause, à escolha de quem a usa.
+  Aqui ela é usada sob os termos da BSD-3-Clause.

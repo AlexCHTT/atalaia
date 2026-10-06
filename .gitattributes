@@ -1,0 +1,10 @@
+# Tudo é gravado com final de linha LF no repositório e baixado como LF, em qualquer sistema.
+# (Scripts .sh e o Dockerfile NÃO funcionam no Linux com CRLF, e o projeto é criado no Windows.)
+* text=auto eol=lf
+
+# Binários: nunca converter
+*.png binary
+*.jpg binary
+*.ico binary
+*.exe binary
+*.msi binary

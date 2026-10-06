@@ -1,0 +1,37 @@
+# --- Resultado de compilação ---
+bin/
+obj/
+publish/
+
+# --- Dados e segredos locais (NUNCA vão para o repositório) ---
+# Bancos SQLite (inclusive o de desenvolvimento, que guarda contas, tokens e a auditoria)
+*.db
+*.db-shm
+*.db-wal
+src/Atalaia.Server/data/
+# Configuração local do Docker (pode conter token e senha)
+.env
+# Chaves e certificados
+*.pfx
+*.key
+*.pem
+
+# --- Ferramentas ---
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+# Capturas e arquivos temporários do Playwright (testes visuais)
+.playwright-cli/
+# Instalador MSI e símbolos gerados localmente
+*.msi
+*.wixpdb
+
+# --- Python (scripts de teste) ---
+__pycache__/
+*.pyc
+
+# --- Sistema ---
+Thumbs.db
+.DS_Store

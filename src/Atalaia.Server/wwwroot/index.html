@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Atalaia</title>
+<meta name="color-scheme" content="light dark">
+<link rel="icon" type="image/svg+xml" href="/img/favicon.svg">
+<link rel="stylesheet" href="/css/app.css">
+<link rel="stylesheet" href="/css/login.css">
+<script src="/js/theme-boot.js"></script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" id="sidebar" aria-label="Navegação principal">
+    <div class="brand">
+      <img src="/img/logo-mark.svg" alt="" width="38" height="38">
+      <div class="brand-text"><div class="brand-name">Atalaia</div><div class="brand-tag">Endpoint intelligence</div></div>
+    </div>
+    <nav class="nav" id="nav"></nav>
+    <div class="sb-foot">
+      <div class="srv" id="srv"><span class="pulse"></span><div><b id="srv-t">Servidor conectado</b><span id="srv-s">atualizando…</span></div></div>
+      <div class="sb-actions"><button class="sb-btn" id="theme-btn" type="button"></button></div>
+      <div class="sb-ver">Atalaia · inventário e auditoria</div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <button class="iconbtn menu-btn" id="menu-btn" type="button" aria-label="Recolher ou expandir o menu"></button>
+      <div class="page-head"><h1 class="page-title" id="page-title">Dashboard</h1><div class="page-sub" id="page-sub"></div></div>
+      <div class="spacer"></div>
+      <div class="search" id="search">
+        <span class="ic-search" id="search-ic"></span>
+        <input id="gs" type="search" placeholder="Buscar dispositivo, usuário, IP, serial…" autocomplete="off" aria-label="Busca global">
+        <kbd>/</kbd>
+        <div class="search-results" id="gs-results" hidden></div>
+      </div>
+      <a class="iconbtn" id="bell" href="#/audit?severity=warn&period=1" aria-label="Alertas das últimas 24 horas" data-tip="Alertas das últimas 24 horas"></a>
+      <div class="me-wrap" id="me-wrap">
+        <button class="me" id="me-btn" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Menu do usuário">
+          <span class="avatar sm" id="me-av" style="--av:#2a78d6"></span>
+          <div><b id="me-name"></b><span id="me-role"></span></div><span class="ic-chev" id="me-chev"></span>
+        </button>
+        <div class="user-menu" id="user-menu" role="menu" hidden></div>
+      </div>
+    </header>
+    <main class="content" id="view" tabindex="-1"></main>
+  </div>
+</div>
+<script type="module" src="/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Atalaia.Agent/Atalaia.Agent.csproj" />
+    <Project Path="src/Atalaia.Server/Atalaia.Server.csproj" />
+    <Project Path="src/Atalaia.Shared/Atalaia.Shared.csproj" />
+  </Folder>
+</Solution>
